@@ -1,5 +1,5 @@
 import pandas as pd
-df = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/netflix_titles.csv')
+# df = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/netflix_titles.csv')
 # print(df.head(8))
 # print(df.tail(8))
 # print(df.shape)
@@ -34,13 +34,32 @@ df = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/D
 # print(highest_key)
 
 #1st Question
-filt = ((df['type'] == 'Movie') & (df['release_year'] >= 2019) & ((df['country'] == 'India') | (df['country'] == 'South Korea') | (df['country'] == 'Japan')))
-print(df.loc[filt])
+# filt = ((df['type'] == 'Movie') & (df['release_year'] >= 2019) & ((df['country'] == 'India') | (df['country'] == 'South Korea') | (df['country'] == 'Japan')))
+# print(df.loc[filt])
 
-#2nd Question
-Documentaries = ((df['listed_in'].str.contains('Documentaries', na=False)) & (df['rating'] == 'TV-MA'))
-print(df.loc[Documentaries])
+# #2nd Question
+# Documentaries = ((df['listed_in'].str.contains('Documentaries', na=False)) & (df['rating'] == 'TV-MA'))
+# print(df.loc[Documentaries])
 
-#3rd Question
-df = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/netflix_titles.csv', index_col='show_id')
-print(df.loc[['s150', 's151'], ['title', 'director']])
+# #3rd Question
+# df = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/netflix_titles.csv', index_col='show_id')
+# print(df.loc[['s150', 's151'], ['title', 'director']])
+
+
+people = {
+    'name' : ['Chiru', 'Priya', 'Prema'],
+    'last' : ['Gowda', 'gowda', 'CG'],
+    'email' : ['chiru@gmail.com', 'priya@gmail.com', 'prema@gmail.com']
+}
+
+df = pd.DataFrame(people)
+df.columns = df.columns.str.replace(' ', '_')
+df.rename(columns={'name' : 'first_name', 'email' : 'email_address'}, inplace=True)
+filt = df['last'] == 'Gowda'
+df.loc[filt, 'first_name'] = 'John'
+print(df['email_address'].apply(lambda x:len(x)))
+df['full_name'] = df['first_name'] + " " + df['last'] 
+df.drop(['first_name', 'last'], axis=1, inplace=True) #I aslo tried to assign it directly to df and it worked but i then shifted to inplace it seemed natural 
+new_row = pd.DataFrame([{'full_name': 'Jane Doe', 'email': 'jane@email.com'}])
+df = pd.concat([df, new_row], ignore_index=True)
+print(df)
