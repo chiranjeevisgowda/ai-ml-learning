@@ -1,9 +1,9 @@
 import pandas as pd
-people = {
-    'name' : ['Chiru', 'Priya', 'Prema'],
-    'last' : ['Gowda', 'gowda', 'CG'],
-    'email' : ['chiru@gmail.com', 'priya@gmail.com', 'prema@gmail.com']
-}
+# people = {
+#     'name' : ['Priya', 'Chiru', 'Prema'],
+#     'last' : ['gowda', 'gowda', 'CG'],
+#     'email' : ['chiru@gmail.com', 'priya@gmail.com', 'prema@gmail.com']
+# }
 
 # df1 = pd.DataFrame(people)
 # # # print(df.set_index('email'))
@@ -86,68 +86,97 @@ people = {
 
 #29/08/1016
 
-df = pd.DataFrame(people)
-#So to type out the columns of a dataframe we use .columns to get all the colums in a data
-print(df.columns)
-#So the new thing i got to know that is that we can manipulate the columns name however we want by using simple functions such as
-#So to do that first we need to assign the value of the colums to a variable so that would be easier 
-df.columns = ['first name', 'last_name', 'email']
-df.columns = [x.lower() for x in df.columns]
-#So if we want to like change the name or how the column is given so that everything is uniform so that it will be easier to use those column name we can change specifics we want 
-df.columns = df.columns.str.replace(' ', '_')
-#So if i am going to use df.email or anything similar if the column name is like first space name then i cant get it to give output since it would be invalid syntax
-#So next thing if i want to cahnge the name of a particular column or a list of colums of my choice i could just give a dict of column which i want to cahnge
-df.rename(columns={'first_name' : 'first', 'last_name' : 'last'}, inplace=True)
-#And we need to use inplace to gurantee that it is set for the entire dataframe not just a single time this is same as set index 
-#So now i am learning about changing values in the data so to do that i can use loc or iloc to me loc is more preferred lets see an example
-df.loc[0] = ['Chiranjeevi S Gowda', 'Chiru', 'Chiru123@gmail.com']
-#But this method is not preferred since if i want to change the value of a data with ex 85 columns i cant exactly type in all the 85 values 
-#So we locate the column values which we want to change same as looking for the column values using the loc 
-df.loc[0, 'first'] = ["Chiranjeevi"]
-#Another method which we can use is at feature 
-df.at[0, 'first'] = 'Chiru'
-df.at[0, 'last'] = 'Gowda'
-#Suppose i have filter and i want to change the value of that filter
-filt = (df['email']) == 'Chiru123@gmail.com'
-df.loc[filt, 'email'] = 'chiru@gmail.com' 
-#Suppose i want to change the value of the entire column to upper or lower case so that it would be uniform in this example i would do uppercase for all the main sicne i already have all of them in lower case
-df['email'] = df['email'].str.upper()
-#Now i am going to learn about apply, map, replace lets see and document it 
-#First i found a cool way of using apply function lets go with the basic till the end 
-# print(df.apply(len)) #This one is to get the len of the overall length if i want the lenght of a particular column we could simply do 
-# print(df['email'].apply(len))
-#So if we want to use the len function on suppose the entire columns not the default rows
-df.apply(len, axis='columns')
-#Next we could use custom function too in the apply function example function
-def update_email(email):
-    return email.lower()
-print(df['email'].apply(update_email))
-#Actually he introduced about lamda function but didnt got in deep and I just applied the same which he did 
-print(df['email'].apply(lambda x:x.upper()))
-#what i got to know is lamda is a anyonomus function and the x defines the input it receives and x.upper indicates that the input should be converted to upper case
-#Next i got to know is apply method works on just a series of data whereas applymap is applied on the entire dataframe rather than a series example # Got into a little confusion when applymap was not working and i got to know that the newer versions just use the map method instead of applymap
-print(df.map(len))
-#another example for using map is using it on a entire dataframe rather than series #according to what i have written i think my entire data frame will be converted to upper case lets see what happens 
-print(df.map(lambda x:x.upper())) #So the conclusion i have reached until now is that map is used to manipulate the entire dataframe rather than a series and apply is used to modify single series or list of series
-#So now we are gonna use replace method when we want to replace a series with the values we want then we can use the replace method ex
-print(df['first'].replace({'Chiru' : 'Chiranjeevi', 'Prema' : 'Premi'}))
-#if we want to manipulate the entire data not just the current output then we can assign the same to df['first'] = the code above 
+# df = pd.DataFrame(people)
+# #So to type out the columns of a dataframe we use .columns to get all the colums in a data
+# print(df.columns)
+# #So the new thing i got to know that is that we can manipulate the columns name however we want by using simple functions such as
+# #So to do that first we need to assign the value of the colums to a variable so that would be easier 
+# df.columns = ['first name', 'last_name', 'email']
+# df.columns = [x.lower() for x in df.columns]
+# #So if we want to like change the name or how the column is given so that everything is uniform so that it will be easier to use those column name we can change specifics we want 
+# df.columns = df.columns.str.replace(' ', '_')
+# #So if i am going to use df.email or anything similar if the column name is like first space name then i cant get it to give output since it would be invalid syntax
+# #So next thing if i want to cahnge the name of a particular column or a list of colums of my choice i could just give a dict of column which i want to cahnge
+# df.rename(columns={'first_name' : 'first', 'last_name' : 'last'}, inplace=True)
+# #And we need to use inplace to gurantee that it is set for the entire dataframe not just a single time this is same as set index 
+# #So now i am learning about changing values in the data so to do that i can use loc or iloc to me loc is more preferred lets see an example
+# df.loc[0] = ['Chiranjeevi S Gowda', 'Chiru', 'Chiru123@gmail.com']
+# #But this method is not preferred since if i want to change the value of a data with ex 85 columns i cant exactly type in all the 85 values 
+# #So we locate the column values which we want to change same as looking for the column values using the loc 
+# df.loc[0, 'first'] = ["Chiranjeevi"]
+# #Another method which we can use is at feature 
+# df.at[0, 'first'] = 'Chiru'
+# df.at[0, 'last'] = 'Gowda'
+# #Suppose i have filter and i want to change the value of that filter
+# filt = (df['email']) == 'Chiru123@gmail.com'
+# df.loc[filt, 'email'] = 'chiru@gmail.com' 
+# #Suppose i want to change the value of the entire column to upper or lower case so that it would be uniform in this example i would do uppercase for all the main sicne i already have all of them in lower case
+# df['email'] = df['email'].str.upper()
+# #Now i am going to learn about apply, map, replace lets see and document it 
+# #First i found a cool way of using apply function lets go with the basic till the end 
+# # print(df.apply(len)) #This one is to get the len of the overall length if i want the lenght of a particular column we could simply do 
+# # print(df['email'].apply(len))
+# #So if we want to use the len function on suppose the entire columns not the default rows
+# df.apply(len, axis='columns')
+# #Next we could use custom function too in the apply function example function
+# def update_email(email):
+#     return email.lower()
+# print(df['email'].apply(update_email))
+# #Actually he introduced about lamda function but didnt got in deep and I just applied the same which he did 
+# print(df['email'].apply(lambda x:x.upper()))
+# #what i got to know is lamda is a anyonomus function and the x defines the input it receives and x.upper indicates that the input should be converted to upper case
+# #Next i got to know is apply method works on just a series of data whereas applymap is applied on the entire dataframe rather than a series example # Got into a little confusion when applymap was not working and i got to know that the newer versions just use the map method instead of applymap
+# print(df.map(len))
+# #another example for using map is using it on a entire dataframe rather than series #according to what i have written i think my entire data frame will be converted to upper case lets see what happens 
+# print(df.map(lambda x:x.upper())) #So the conclusion i have reached until now is that map is used to manipulate the entire dataframe rather than a series and apply is used to modify single series or list of series
+# #So now we are gonna use replace method when we want to replace a series with the values we want then we can use the replace method ex
+# print(df['first'].replace({'Chiru' : 'Chiranjeevi', 'Prema' : 'Premi'}))
+# #if we want to manipulate the entire data not just the current output then we can assign the same to df['first'] = the code above 
 
-#NEXT VIDEO
-#So first i got to know how i can combine two columns into one cloumn and we will try our own thing which makes it learning 
-print(df['first'] + " " + df['last']) # so suppose i want to make this get applied to main dataset then i can just give a new name and then make it to the main dataset
-df['name'] = (df['first'] + " " + df['last'])
-#So now the little twist i want to add of my own is i want to check if i can change the main index of the data set to name instead of the default index number
-# df = df.set_index('name') #With the output i received i could confirm that yes we could do that 
-#So since i have combined the first and the last so now i have no need of them then i can just use drop to remove those columns and if i am satisfied with the result then i can just use inplace to make it permanent
-df.drop(columns=['first', 'last'], inplace=True)
-#So since we have comined both the first and the last but suppose in a real data set there is a column which is already combined and we want to separate them or split into different columns we could just do
-df['name'].str.split(' ', expand=True)
-df[['first', 'last']] = df['name'].str.split(' ', expand=True) #One thing i noticed since we made the name as the main index we were not able to perform this action on the datframe since name was the main index
-#So he inroduced a method append and we could jsut append values to the existing dataframe and the value we dont insert will be left nan but before we do that we need to confirm True for ignore_index
-#Oooo no got to know one more thing we cant simply use append now it is also removed from the moder python I think the newer version is a bit more time consuming than the older append version but also i want to try a simple thing apart from append 
-# print(df.map({'first' : 'chiran'})) #Wanted to experiment with map if it worked as append but no it doesnt 
-#So if we want to drop any columns we could just use drop
-df.drop(index=2)
-#We can even use conditional to drop the rows such as we used filt previously 
-print(df)
+# #NEXT VIDEO
+# #So first i got to know how i can combine two columns into one cloumn and we will try our own thing which makes it learning 
+# print(df['first'] + " " + df['last']) # so suppose i want to make this get applied to main dataset then i can just give a new name and then make it to the main dataset
+# df['name'] = (df['first'] + " " + df['last'])
+# #So now the little twist i want to add of my own is i want to check if i can change the main index of the data set to name instead of the default index number
+# # df = df.set_index('name') #With the output i received i could confirm that yes we could do that 
+# #So since i have combined the first and the last so now i have no need of them then i can just use drop to remove those columns and if i am satisfied with the result then i can just use inplace to make it permanent
+# df.drop(columns=['first', 'last'], inplace=True)
+# #So since we have comined both the first and the last but suppose in a real data set there is a column which is already combined and we want to separate them or split into different columns we could just do
+# df['name'].str.split(' ', expand=True)
+# df[['first', 'last']] = df['name'].str.split(' ', expand=True) #One thing i noticed since we made the name as the main index we were not able to perform this action on the datframe since name was the main index
+# #So he inroduced a method append and we could jsut append values to the existing dataframe and the value we dont insert will be left nan but before we do that we need to confirm True for ignore_index
+# #Oooo no got to know one more thing we cant simply use append now it is also removed from the moder python I think the newer version is a bit more time consuming than the older append version but also i want to try a simple thing apart from append 
+# # print(df.map({'first' : 'chiran'})) #Wanted to experiment with map if it worked as append but no it doesnt 
+# #So if we want to drop any columns we could just use drop
+# df.drop(index=2)
+# #We can even use conditional to drop the rows such as we used filt previously 
+# print(df)
+
+
+#31/08/2026
+
+# people = {
+#     'name' : ['Priya', 'Chiru', 'Prema'],
+#     'last' : ['gowda', 'gowda', 'CG'],
+#     'email' : ['chiru@gmail.com', 'priya@gmail.com', 'prema@gmail.com']
+# }
+# df = pd.DataFrame(people)
+
+# # Find all text columns
+# text_cols = df.select_dtypes(include=['object', 'category']).columns
+
+# # Apply lowercase using the vectorized string method
+# df[text_cols] = df[text_cols].apply(lambda x: x.str.lower())
+
+# #So today we are gonna learn about Sorting Data So for first we begin with sort_values with an argument by= 'column' so if there duplicates among the values then we can sort using list of multiple columns one after the another so now i want to try how i can do it 
+# filt = ['last', 'name'] #I mean i could use the filt also as well as directly input the list into the by 
+# print(df.sort_values(by=['last', 'name']))
+# #new thing learnt if i want to like sort two columns in different order then we can use the ascending = true or false in a list corresponding to the list 
+# print(df.sort_values(by=['last', 'name'], ascending=[False, True]))
+# #If i want to particularly sort a single column then i can do this 
+# print(df['last'].sort_values())
+
+#lets apply these on the real dataset
+dataset = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/StudentsPerformance.csv')
+print(dataset)
+print(dataset['writing score'].nsmallest(100))
