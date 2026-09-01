@@ -177,6 +177,32 @@ import pandas as pd
 # print(df['last'].sort_values())
 
 #lets apply these on the real dataset
-dataset = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/StudentsPerformance.csv')
-print(dataset)
-print(dataset['writing score'].nsmallest(100))
+dataset = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/survey_results_public.csv', index_col='Respondent')
+schema = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/survey_results_schema.csv', index_col='Column')
+dataset.columns = dataset.columns.str.lower()
+dataset = dataset.astype(str).apply(lambda x: x.str.lower())
+# print(dataset['writing score'].nsmallest(100))
+
+#Now with necxt video we will be playing with grouping and aggregating lets get with it 
+# print(dataset['ConvertedComp'].median())
+# print(dataset.median(numeric_only=True))
+print(dataset.describe()) #So we can use describe to describe the statistical values of the dataset simply and we can also get the statistical data of a single column 
+# print(schema.loc['Social Media'])
+# print(dataset.columns.sort_values())
+# print(schema.loc['Hobbyist'])
+# print(dataset['hobbyist'].value_counts()) # So using value counts we can basically see the value count of each answer and is we want to see them in percenatage we can use the normalise feature to do so 
+# print(dataset['hobbyist'].value_counts(normalize=True))
+# print(dataset['country'].value_counts(normalize=True))
+#So now we are moving to the actual practical tools used in eda project or any data cleaning process lets start with groupby
+country_grp = dataset.groupby('country') #So basically it groups rows if they have the country name identical if respondent 2 is from india and respondednt 5 is from india then it groups them together i think so since i havent yet ran the code
+# print(country_grp.get_group('india')) 
+#So one thing i understood is if we want a value of a single country then we can just create a filter and use that filter to get the results example
+# filt = dataset['country'] == 'india'
+# print(dataset[filt]['hobbyist'].value_counts()) # we can do this for a single country so what if we want to do the same thing on multiple countries to get what differeny countries has their opinion example
+# print(country_grp['hobbyist'].value_counts()) #So the main useful thing about this according to me is since we cant create filter for each country instead we could just do the droup by and access any individual country according to our choice
+# print(country_grp['hobbyist'].value_counts().loc['india'])
+#So i can even grab other columns other than hobbyist and if its a int column then i can perform other actions on them 
+# Apply median to the full DataFrame group, then extract the column
+dataset['convertedcomp'] = pd.to_numeric(dataset['convertedcomp'], errors='coerce')
+median = country_grp['convertedcomp'].agg(['median', 'mean', 'count'])
+print(median)
