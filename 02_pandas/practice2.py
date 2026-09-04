@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 # people = {
 #     'name' : ['Priya', 'Chiru', 'Prema'],
 #     'last' : ['gowda', 'gowda', 'CG'],
@@ -177,32 +178,67 @@ import pandas as pd
 # print(df['last'].sort_values())
 
 #lets apply these on the real dataset
-dataset = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/survey_results_public.csv', index_col='Respondent')
-schema = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/survey_results_schema.csv', index_col='Column')
-dataset.columns = dataset.columns.str.lower()
-dataset = dataset.astype(str).apply(lambda x: x.str.lower())
-# print(dataset['writing score'].nsmallest(100))
+# dataset = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/survey_results_public.csv', index_col='Respondent')
+# schema = pd.read_csv('/Users/chiru/Code Playground/Python/ai-ml-learning/02_pandas/Data/survey_results_schema.csv', index_col='Column')
+# dataset.columns = dataset.columns.str.lower()
+# dataset = dataset.astype(str).apply(lambda x: x.str.lower())
+# # print(dataset['writing score'].nsmallest(100))
 
-#Now with necxt video we will be playing with grouping and aggregating lets get with it 
-# print(dataset['ConvertedComp'].median())
-# print(dataset.median(numeric_only=True))
-print(dataset.describe()) #So we can use describe to describe the statistical values of the dataset simply and we can also get the statistical data of a single column 
-# print(schema.loc['Social Media'])
-# print(dataset.columns.sort_values())
-# print(schema.loc['Hobbyist'])
-# print(dataset['hobbyist'].value_counts()) # So using value counts we can basically see the value count of each answer and is we want to see them in percenatage we can use the normalise feature to do so 
-# print(dataset['hobbyist'].value_counts(normalize=True))
-# print(dataset['country'].value_counts(normalize=True))
-#So now we are moving to the actual practical tools used in eda project or any data cleaning process lets start with groupby
-country_grp = dataset.groupby('country') #So basically it groups rows if they have the country name identical if respondent 2 is from india and respondednt 5 is from india then it groups them together i think so since i havent yet ran the code
-# print(country_grp.get_group('india')) 
-#So one thing i understood is if we want a value of a single country then we can just create a filter and use that filter to get the results example
-# filt = dataset['country'] == 'india'
-# print(dataset[filt]['hobbyist'].value_counts()) # we can do this for a single country so what if we want to do the same thing on multiple countries to get what differeny countries has their opinion example
-# print(country_grp['hobbyist'].value_counts()) #So the main useful thing about this according to me is since we cant create filter for each country instead we could just do the droup by and access any individual country according to our choice
-# print(country_grp['hobbyist'].value_counts().loc['india'])
-#So i can even grab other columns other than hobbyist and if its a int column then i can perform other actions on them 
-# Apply median to the full DataFrame group, then extract the column
-dataset['convertedcomp'] = pd.to_numeric(dataset['convertedcomp'], errors='coerce')
-median = country_grp['convertedcomp'].agg(['median', 'mean', 'count'])
-print(median)
+# #Now with necxt video we will be playing with grouping and aggregating lets get with it 
+# # print(dataset['ConvertedComp'].median())
+# # print(dataset.median(numeric_only=True))
+# print(dataset.describe()) #So we can use describe to describe the statistical values of the dataset simply and we can also get the statistical data of a single column 
+# # print(schema.loc['Social Media'])
+# # print(dataset.columns.sort_values())
+# # print(schema.loc['Hobbyist'])
+# # print(dataset['hobbyist'].value_counts()) # So using value counts we can basically see the value count of each answer and is we want to see them in percenatage we can use the normalise feature to do so 
+# # print(dataset['hobbyist'].value_counts(normalize=True))
+# # print(dataset['country'].value_counts(normalize=True))
+# #So now we are moving to the actual practical tools used in eda project or any data cleaning process lets start with groupby
+# country_grp = dataset.groupby('country') #So basically it groups rows if they have the country name identical if respondent 2 is from india and respondednt 5 is from india then it groups them together i think so since i havent yet ran the code
+# # print(country_grp.get_group('india')) 
+# #So one thing i understood is if we want a value of a single country then we can just create a filter and use that filter to get the results example
+# # filt = dataset['country'] == 'india'
+# # print(dataset[filt]['hobbyist'].value_counts()) # we can do this for a single country so what if we want to do the same thing on multiple countries to get what differeny countries has their opinion example
+# # print(country_grp['hobbyist'].value_counts()) #So the main useful thing about this according to me is since we cant create filter for each country instead we could just do the droup by and access any individual country according to our choice
+# # print(country_grp['hobbyist'].value_counts().loc['india'])
+# #So i can even grab other columns other than hobbyist and if its a int column then i can perform other actions on them 
+# # Apply median to the full DataFrame group, then extract the column
+# dataset['convertedcomp'] = pd.to_numeric(dataset['convertedcomp'], errors='coerce')
+# median = country_grp['convertedcomp'].agg(['median', 'mean', 'count'])
+# print(median)
+
+
+# df = pd.read_csv('Data/Recently Funded Startups In India 2026.csv')
+# df = df.rename(columns={'Funding Amount (USD)' : 'Funding Amount'}) #Changing funding amount usd to just funding amount
+# df = df.dropna(axis='index' , how='all', subset=['Funding Amount', 'Funding Type']) # so till now i learnt about axis , how , and subset if we want to remove a particular missing row and we can all remove entire row is all values are none or na 
+# # filt = df['Industry'].str.contains('Software|Artificial Intelligence|AI', na=False) 
+# # Select both columns, apply the filter, and sort by Funding Amount
+# # print(df[['Website', 'Funding Amount']][filt].sort_values(by='Funding Amount', ascending=False)) #Just some experiment of my own to identify the comapnay which have received most number of funding but based on the keywords that are relevant to me 
+# # Remove $, commas, spaces, and text characters
+# cleaned_column = df['Funding Amount'].astype(str).str.replace(r'[$,\s]', '', regex=True)
+# # median = pd.to_numeric(cleaned_column, errors='coerce').median()
+# # df.fillna({'Funding Amount' : median}, inplace=True)
+# df['Funding Amount'] = cleaned_column.astype(float)
+# df['Last Funding Date'] = pd.to_datetime(df['Last Funding Date']) # So this was not part of the video just got curious if i could chnage the date dtype to something useful instead of str so chnaged it
+# print(df.head(10))
+# print(df.dtypes)
+
+data = {
+    "Date": [
+        "2020-03-13 08-PM",
+        "2020-03-13 07-PM",
+        "2020-03-13 06-PM",
+        "2020-03-13 05-PM",
+        "2020-03-13 04-PM"
+    ],
+    "Symbol": ["ETHUSD", "ETHUSD", "ETHUSD", "ETHUSD", "ETHUSD"],
+    "Open": [129.94, 119.51, 124.47, 124.08, 124.85],
+    "High": [131.82, 132.02, 124.85, 127.42, 129.51],
+    "Low": [126.87, 117.10, 115.50, 121.63, 120.17],
+    "Close": [128.71, 129.94, 119.51, 124.47, 124.08],
+    "Volume": [1940673.93, 7579741.09, 4898735.81, 2753450.92, 4461424.71]
+}
+
+df = pd.DataFrame(data)
+print(df)
